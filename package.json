@@ -8,6 +8,8 @@
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.2.2",
     "@testing-library/user-event": "^12.2.2",
+    "axios": "^0.21.1",
+    "axios-auth-refresh": "^3.1.0",
     "bootstrap": "^4.5.3",
     "local-storage": "^2.0.0",
     "ms": "^2.1.2",

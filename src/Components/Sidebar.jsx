@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 
 function Sidebar({ playlist }) {
   console.log(playlist);
+
   return (
     <div className="sidebar">
       <img
@@ -28,9 +29,10 @@ function Sidebar({ playlist }) {
       <strong className="sidebar__title">playlist</strong>
       <hr />
       <div className="sidebar__playlist-container mt-3">
-        {playlist?.map((singlePlaylist) => (
-          <SidebarOption title={singlePlaylist.name} whatType="playlist" />
-        ))}
+        {playlist &&
+          playlist.map((singlePlaylist) => (
+            <SidebarOption title={singlePlaylist.name} whatType="playlist" />
+          ))}
       </div>
     </div>
   );

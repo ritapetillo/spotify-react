@@ -1,0 +1,42 @@
+.playlist{
+    background: linear-gradient(0deg,hsla(0,0%,100%,0.2),hsla(0,0%,100%,0.2)) #1877f2;
+            
+
+}
+.playlist__details{
+        background: linear-gradient(transparent,rgba(0,0,0,.5));
+        padding: 30px 20px; 
+        color:white;
+        width: 100%;
+
+}
+
+h1.playlist__album-title{
+    font-size: 96px !important;
+    font-weight: 700;
+}
+.playlist__bottom{
+        background: linear-gradient(rgba(0,0,0,.5), black);
+        padding:10px 20px;
+        min-height: 50vh;
+        
+}
+.playlist__bottom .MuiSvgIcon-root{
+    font-size: 2.5em;
+    cursor: pointer;
+    display: block;
+    color:white;
+    font-weight: 100;
+    margin-right:20px;
+}
+.playlist__bottom .MuiSvgIcon-root:first-child{
+        color:#1DB94F;
+            font-size: 4.5em;
+
+
+}
+
+.playlist__bottom .table-dark{
+    background:transparent;
+    color:white;
+}

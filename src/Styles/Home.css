@@ -1,0 +1,9 @@
+.home{
+   
+    background-color: #121223;
+    flex:0.8;
+    color:white;
+    padding: 30px;
+    min-height: 100vh;
+
+}

@@ -1,23 +1,99 @@
-import logo from './logo.svg';
+import React, { useState, useEffect } from "react";
+import queryString from "query-string";
+import ls from 'local-storage'
+import SpotifyWebApi from "spotify-web-api-js";
+import "bootstrap/dist/css/bootstrap.min.css";
+
 import './App.css';
+import Login from './Components/Login';
+import {Route} from 'react-router-dom'
+import Home from './Components/Home';
+import {
+  loginUrl, fetchToken
+} from "./utils/spotify";
+import Player from './Components/Player'
+import {useStateProviderValue} from './StateProvider'
+import Sidebar from "./Components/Sidebar";
+import Footer from "./Components/Footer";
+import PrivateRoute from './Components/PrivateRoute'
+import PlayList from "./Components/PlayList";
+import Search from "./Components/Search";
+
+
+const spotifyApi = new SpotifyWebApi()
 
 function App() {
+  const [r_token, setR_token] = useState(null);
+  const [token, setToken] = useState(null);
+  const [currentUser, setCurrentUser] = useState("");
+  const [{ user}, dispatch] = useStateProviderValue();
+  
+
+  //get token and refresh token function
+  const getToken = async (code) => {
+    try {
+      let res = await fetchToken(code);
+      if (res.access_token) {
+        ls.set("token", res.access_token);
+        ls.set("refresh_token", res.refresh_token);
+        dispatch({
+          type: "SET_TOKEN",
+          token: ls.get("token"),
+          refreshToken: ls.get("refresh_token"),
+        });
+        setToken(res.access_token);
+        setR_token(res.refresh_token);
+        getUser(res.access_token)
+      }
+    } catch (e) {
+    }
+  };
+
+  //after getting the token, I want to get the user
+  const getUser =  async (token) => {
+    if (token) {
+      spotifyApi.setAccessToken(token);
+      let currentUser = await spotifyApi.getMe();
+      if (currentUser) {
+                setCurrentUser(currentUser);
+
+            dispatch({
+              type: "SET_USER",
+              user: currentUser,
+            });
+      
+      }
+    }
+     
+  };
+
+  useEffect(() => {
+
+    const search = queryString.parse(window.location.search);
+    const code = search["code"];
+    if(code){
+    getToken(code);}
+  
+
+  },[]);
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <Route exact path="/login" component={Login} />
+      {ls.get("token") && <Sidebar />}
+      <Route exact path="/" render={(props) => <Home {...props} />} />
+      <Route
+        exact
+        path="/playlist/:id"
+        render={(props) => <PlayList {...props} />}
+      />
+      <Route
+        exact
+        path="/search"
+        render={(props) => <Search {...props} />}
+      />
+
+      {ls.get("token") && <Footer />}
     </div>
   );
 }
